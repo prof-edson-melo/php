@@ -1,0 +1,89 @@
+<?php require ABSPATH . '/visoes/assets/includes/header.php'; ?>
+
+<!-- Conteúdo da página principal -->
+<div class="col-md-10">
+    <div class="container-fluid">
+
+        <!-- Produtos Breadcrumb-->
+        <div class="row">
+            <div class="col-xs-12">
+                <?php
+                $categoria = new Categorias();
+                $categoria = unserialize($_SESSION['subcategoria']);
+
+                //var_dump($categoria);
+                foreach ($categoria as $tituloCategoria) {
+                    $strCategoria = ("{$tituloCategoria->getDescricaoCategoria()}");
+                }
+                ?>                
+                <?php
+                $subCategoria = new Categorias();
+                $subCategoria = unserialize($_SESSION['subcategoria']);
+                foreach ($subCategoria as $tituloSubCategoria) {
+                    $e = $tituloSubCategoria->getDescricaoSubCategoria();
+                }
+                ?>
+
+                <ol class="breadcrumb">
+                    <li><a href="index.php">Início</a></li>
+                    <li class="active"><?php echo $strCategoria; ?> / <?php echo $e; ?></li>
+                </ol>
+
+
+
+                <hr />
+            </div>
+        </div>
+
+        <!-- Produtos -->
+        <div class="row">
+            <!-- Início da carga dos produtos -->
+            <?php
+            // cria o objeto $objProdutos
+            $objProdutos = new Produtos();
+
+            // carrega o objeto $objProdutos
+            $objProdutos = unserialize($_SESSION['produtos']);
+
+            // percorre os objetos e apresenta os resultados
+            foreach ($objProdutos as $produto) {
+                ?>
+                <div class="col-xs-12 col-md-3">
+                    <div class="thumbnail">
+                        <a href="?controle=produto&acao=detalhes&idProduto=<?php echo ($produto->getIdProduto()); ?>">
+                            <img src="<?php echo(IMGPRODUTOS_ABSPATH) . '/' . $produto->getImagem(); ?>" 
+                                 title="<?php echo ($produto->getTitulo()); ?>" 
+                                 alt="<?php echo ($produto->getTitulo()); ?>">
+                        </a>
+                        <div class="caption center">
+                            <p><?php echo ($produto->getAutores()); ?></p>
+                            <p><small>De:<del>R$ <?php echo (moeda($produto->getValor())); ?></del></small></p>
+                            <p>Por: <strong>R$ <?php echo (moeda($produto->getValor() * $produto->getDesconto())); ?></strong></p>
+                            <p>
+                                <a href="?controle=carrinho&acao=incluir&idProduto=<?php echo ($produto->getIdProduto()); ?>" class="btn btn-success" role="button">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                                    Adicionar ao carrinho
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <?php }
+            ?>
+            <!-- Fim da carga dos produtos -->
+        </div>
+        <!-- Paginação -->
+        <div class="row center">
+            <ul class="pagination">
+                <li><a href="">&laquo;</a></li>
+                <li><a href="">1</a></li>
+                <li><a href="">2</a></li>
+                <li><a href="">3</a></li>
+                <li><a href="">4</a></li>
+                <li><a href="">5</a></li>
+                <li><a href="">&raquo;</a></li>
+            </ul>
+        </div>
+        <!-- Fim da paginação -->
+        <?php require ABSPATH . '/visoes/assets/includes/footer.php'; ?>
+
